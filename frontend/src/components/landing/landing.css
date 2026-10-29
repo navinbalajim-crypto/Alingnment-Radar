@@ -1,0 +1,83 @@
+/* Landing page styles. Everything is scoped under .alignment-landing so nothing
+   leaks into the authenticated app. */
+
+.alignment-landing {
+  --lp-ink: #10202a;
+  --lp-cream: #fbf6ee;
+  --lp-cyan: #34d3e8;
+  --lp-blue: #2f7fd8;
+  color: var(--lp-ink);
+  background: #0b1215;
+  overflow-x: clip;
+}
+
+.alignment-landing .lp-serif {
+  font-family: ui-serif, Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Scene ambience ---------- */
+@keyframes lp-twinkle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+@keyframes lp-flicker {
+  0%, 100% { transform: scaleY(1) translateX(0); opacity: 1; }
+  30% { transform: scaleY(1.08) translateX(-0.5px); opacity: 0.92; }
+  60% { transform: scaleY(0.94) translateX(0.5px); opacity: 1; }
+}
+@keyframes lp-breathe {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.012); }
+}
+@keyframes lp-blink {
+  0%, 94%, 100% { transform: scaleY(1); }
+  96% { transform: scaleY(0.1); }
+}
+@keyframes lp-sway {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(1.4deg); }
+}
+@keyframes lp-dash {
+  to { stroke-dashoffset: -24; }
+}
+@keyframes lp-wave {
+  0%, 100% { transform: scaleY(0.55); }
+  50% { transform: scaleY(1); }
+}
+@keyframes lp-pop-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+.alignment-landing .lp-bulb { animation: lp-twinkle 3.2s ease-in-out infinite; }
+.alignment-landing .lp-flame { transform-box: fill-box; transform-origin: 50% 100%; animation: lp-flicker 1.6s ease-in-out infinite; }
+.alignment-landing .lp-breathe { transform-box: fill-box; transform-origin: 50% 100%; animation: lp-breathe 5s ease-in-out infinite; }
+.alignment-landing .lp-eye { transform-box: fill-box; transform-origin: center; animation: lp-blink 6s infinite; }
+.alignment-landing .lp-leaf { transform-box: fill-box; transform-origin: 50% 100%; animation: lp-sway 7s ease-in-out infinite; }
+.alignment-landing .lp-flow { stroke-dasharray: 6 6; animation: lp-dash 1.2s linear infinite; }
+.alignment-landing .lp-wavebar { transform-origin: 50% 50%; animation: lp-wave 1.4s ease-in-out infinite; }
+.alignment-landing .lp-msg-in { animation: lp-pop-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* The girl's head reacts to the story phase (set as data-mood on the scene root). */
+.alignment-landing .lp-head {
+  transform-box: fill-box;
+  transform-origin: 40% 95%;
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  /* Head tipped down toward the phone while she reads. */
+  transform: rotate(7deg);
+}
+.alignment-landing [data-mood='puzzled'] .lp-head { transform: rotate(-6deg); }
+.alignment-landing [data-mood='watching'] .lp-head { transform: rotate(-2deg); }
+.alignment-landing [data-mood='relieved'] .lp-head { transform: rotate(4deg); }
+.alignment-landing .lp-brow { transition: transform 0.6s ease; transform-box: fill-box; transform-origin: center; }
+.alignment-landing [data-mood='puzzled'] .lp-brow { transform: translateY(-2px) rotate(-8deg); }
+
+@media (prefers-reduced-motion: reduce) {
+  .alignment-landing *,
+  .alignment-landing *::before,
+  .alignment-landing *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}

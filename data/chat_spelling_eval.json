@@ -1,0 +1,662 @@
+[
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "the project is delay because of yuo so qick it fast",
+  "expected": "the project is delay because of you so quick it fast"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "can yuo send me the reprot tomorow",
+  "expected": "can you send me the report tomorrow"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "i will recieve the files becuase of teh deadline",
+  "expected": "i will receive the files because of the deadline"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "pleese check the documnet again",
+  "expected": "please check the document again"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "we need to finsih this befor friday",
+  "expected": "we need to finish this before friday"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "thnaks for the quick reponse",
+  "expected": "thanks for the quick response"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "that meetng was relly helpful",
+  "expected": "that meeting was really helpful"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "did you recieve my mesage",
+  "expected": "did you receive my message"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "the sceduling is conflicting with teh review",
+  "expected": "the scheduling is conflicting with the review"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "iam not shure about the budjet",
+  "expected": "iam not sure about the budget"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "could you shaer the updated verison",
+  "expected": "could you share the updated version"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "its definately going to be late",
+  "expected": "its definitely going to be late"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "sory for the delya",
+  "expected": "sorry for the delay"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "pelase confrim the time",
+  "expected": "please confirm the time"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "we shuold discuss it tomorow",
+  "expected": "we should discuss it tomorrow"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "waht is the dealine for the submision",
+  "expected": "what is the deadline for the submission"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "i cant fidn the attachement",
+  "expected": "i cant find the attachment"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "this is an importnat update",
+  "expected": "this is an important update"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "lets sheudle a call nxt week",
+  "expected": "lets schedule a call next week"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "the clinet wants a quick answer",
+  "expected": "the client wants a quick answer"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "pleas send the lastest copy",
+  "expected": "please send the latest copy"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "hapy to help with teh task",
+  "expected": "happy to help with the task"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "the reuslt looks godo",
+  "expected": "the result looks good"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "we are workng on it now",
+  "expected": "we are working on it now"
+ },
+ {
+  "split": "dev",
+  "kind": "typo",
+  "input": "thier team is ready",
+  "expected": "their team is ready"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "the project is delay because of yuo so qick it fast",
+  "expected": "the project is delay because of you so quick it fast"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "teh meeting starts at noon",
+  "expected": "the meeting starts at noon"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "i recieve your email yesterday",
+  "expected": "i receive your email yesterday"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "becuase it was urgent we moved on",
+  "expected": "because it was urgent we moved on"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "i will send it tomorow morning",
+  "expected": "i will send it tomorrow morning"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "yuo should see the report",
+  "expected": "you should see the report"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "it was a qick fix",
+  "expected": "it was a quick fix"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "wiht the new design it works",
+  "expected": "with the new design it works"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "adn then we deploy",
+  "expected": "and then we deploy"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "thsi is the final draft",
+  "expected": "this is the final draft"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "pleaes review the changes",
+  "expected": "please review the changes"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "we need more tiem",
+  "expected": "we need more time"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "cna you help me with this",
+  "expected": "can you help me with this"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "i dont knwo the answer",
+  "expected": "i don't know the answer"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "the deadlien is tomorrow",
+  "expected": "the deadline is tomorrow"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "thnak you for the help",
+  "expected": "thank you for the help"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "shoudl we start now",
+  "expected": "should we start now"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "that was really usefull",
+  "expected": "that was really useful"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "hellp me with the build",
+  "expected": "help me with the build"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "we have to wirte the summary",
+  "expected": "we have to write the summary"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "the databse is slow today",
+  "expected": "the database is slow today"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "could you chekc the logs",
+  "expected": "could you check the logs"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "im verry sorry about that",
+  "expected": "im very sorry about that"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "lets discus it later",
+  "expected": "lets discuss it later"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "the feture is almost done",
+  "expected": "the feature is almost done"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "whats the statsu of the task",
+  "expected": "whats the status of the task"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "pelase do it quikly",
+  "expected": "please do it quickly"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "we recived the payment",
+  "expected": "we received the payment"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "thier is no issue",
+  "expected": "their is no issue"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "this is teh best option",
+  "expected": "this is the best option"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "i am goin to the office",
+  "expected": "i am going to the office"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "the customr called again",
+  "expected": "the customer called again"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "nobdy replied yet",
+  "expected": "nobody replied yet"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "i thnik we are done",
+  "expected": "i think we are done"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "let me knwo when ready",
+  "expected": "let me know when ready"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "my laptpo crashed",
+  "expected": "my laptop crashed"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "we shoud ship it",
+  "expected": "we should ship it"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "anohter meeting tomorrow",
+  "expected": "another meeting tomorrow"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "the cahnge is small",
+  "expected": "the change is small"
+ },
+ {
+  "split": "test",
+  "kind": "typo",
+  "input": "pleas wait a minute",
+  "expected": "please wait a minute"
+ },
+ {
+  "split": "dev",
+  "kind": "clean",
+  "input": "hi how are you doing today",
+  "expected": "hi how are you doing today"
+ },
+ {
+  "split": "dev",
+  "kind": "clean",
+  "input": "can you send the report by friday",
+  "expected": "can you send the report by friday"
+ },
+ {
+  "split": "dev",
+  "kind": "clean",
+  "input": "ping @alice_t about the review",
+  "expected": "ping @alice_t about the review"
+ },
+ {
+  "split": "dev",
+  "kind": "clean",
+  "input": "see https://example.com/docs for details",
+  "expected": "see https://example.com/docs for details"
+ },
+ {
+  "split": "dev",
+  "kind": "clean",
+  "input": "email me at bob@example.com when ready",
+  "expected": "email me at bob@example.com when ready"
+ },
+ {
+  "split": "dev",
+  "kind": "clean",
+  "input": "run npm install and then npm run build",
+  "expected": "run npm install and then npm run build"
+ },
+ {
+  "split": "dev",
+  "kind": "clean",
+  "input": "ok sounds good thanks",
+  "expected": "ok sounds good thanks"
+ },
+ {
+  "split": "dev",
+  "kind": "clean",
+  "input": "the API returns JSON with a status field",
+  "expected": "the API returns JSON with a status field"
+ },
+ {
+  "split": "dev",
+  "kind": "clean",
+  "input": "Anirudh and Vijay are joining the call",
+  "expected": "Anirudh and Vijay are joining the call"
+ },
+ {
+  "split": "dev",
+  "kind": "clean",
+  "input": "lol that was funny",
+  "expected": "lol that was funny"
+ },
+ {
+  "split": "dev",
+  "kind": "clean",
+  "input": "we use useState and useEffect in the component",
+  "expected": "we use useState and useEffect in the component"
+ },
+ {
+  "split": "dev",
+  "kind": "clean",
+  "input": "meet in Chennai on Monday",
+  "expected": "meet in Chennai on Monday"
+ },
+ {
+  "split": "dev",
+  "kind": "clean",
+  "input": "I will be late, sorry",
+  "expected": "I will be late, sorry"
+ },
+ {
+  "split": "dev",
+  "kind": "clean",
+  "input": "the PR is ready for QA",
+  "expected": "the PR is ready for QA"
+ },
+ {
+  "split": "dev",
+  "kind": "clean",
+  "input": "i was gonna ask about it",
+  "expected": "i was gonna ask about it"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "good morning everyone",
+  "expected": "good morning everyone"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "can we move the meeting to tomorrow",
+  "expected": "can we move the meeting to tomorrow"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "thanks for the update, looks great",
+  "expected": "thanks for the update, looks great"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "please review the pull request when you can",
+  "expected": "please review the pull request when you can"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "the deadline is next friday at 5 pm",
+  "expected": "the deadline is next friday at 5 pm"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "check the logs in /var/log/app.log",
+  "expected": "check the logs in /var/log/app.log"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "my username is navin_star on github",
+  "expected": "my username is navin_star on github"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "send it to carol@example.org please",
+  "expected": "send it to carol@example.org please"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "see https://github.com/org/repo/issues/42",
+  "expected": "see https://github.com/org/repo/issues/42"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "the CEO and CFO approved the budget",
+  "expected": "the CEO and CFO approved the budget"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "Tamil songs by Anirudh are great",
+  "expected": "Tamil songs by Anirudh are great"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "we need to deploy the hotfix today",
+  "expected": "we need to deploy the hotfix today"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "ok lol that works for me",
+  "expected": "ok lol that works for me"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "don't worry about it, i will handle the rest",
+  "expected": "don't worry about it, i will handle the rest"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "i think its better to wait for feedback",
+  "expected": "i think its better to wait for feedback"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "the frontend and backend are in sync",
+  "expected": "the frontend and backend are in sync"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "wanna grab lunch after the standup",
+  "expected": "wanna grab lunch after the standup"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "this is a quick note about the schedule",
+  "expected": "this is a quick note about the schedule"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "WhatsApp and Spotify links are shared",
+  "expected": "WhatsApp and Spotify links are shared"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "call me when you reach the office",
+  "expected": "call me when you reach the office"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "I am working on the onboarding flow",
+  "expected": "I am working on the onboarding flow"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "the timeline looks realistic now",
+  "expected": "the timeline looks realistic now"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "what time works for you on Wednesday",
+  "expected": "what time works for you on Wednesday"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "we should align on the scope first",
+  "expected": "we should align on the scope first"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "thanks, that makes sense",
+  "expected": "thanks, that makes sense"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "Im free after 3, ping me",
+  "expected": "Im free after 3, ping me"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "please keep the tone professional",
+  "expected": "please keep the tone professional"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "the socket connection dropped again",
+  "expected": "the socket connection dropped again"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "tomorrow is the submission deadline",
+  "expected": "tomorrow is the submission deadline"
+ },
+ {
+  "split": "test",
+  "kind": "clean",
+  "input": "send me the final version of the report",
+  "expected": "send me the final version of the report"
+ }
+]

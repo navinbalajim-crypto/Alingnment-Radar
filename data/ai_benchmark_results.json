@@ -1,0 +1,187 @@
+[
+  {
+    "provider": "local_engine",
+    "total_cases": 7,
+    "accuracy_pct": 100.0,
+    "preservation_pct": 100.0,
+    "avg_latency_ms": 0.096,
+    "min_latency_ms": 0.003,
+    "max_latency_ms": 0.546,
+    "network_calls": 0,
+    "details": [
+      {
+        "input": "I like Anirudh misic and songs",
+        "latency_ms": 0.546,
+        "output": "I like Anirudh music and songs",
+        "accuracy_pass": true,
+        "preservation_pass": true
+      },
+      {
+        "input": "Please recomend some good tracks",
+        "latency_ms": 0.032,
+        "output": "Please recommend some good tracks",
+        "accuracy_pass": true,
+        "preservation_pass": true
+      },
+      {
+        "input": "I will send it tomorow afternoon",
+        "latency_ms": 0.026,
+        "output": "I will send it tomorrow afternoon",
+        "accuracy_pass": true,
+        "preservation_pass": true
+      },
+      {
+        "input": "I will submit the draft tmrw bcoz I am busy",
+        "latency_ms": 0.034,
+        "output": "I will submit the draft tomorrow because I am busy",
+        "accuracy_pass": true,
+        "preservation_pass": true
+      },
+      {
+        "input": "tomorrow is submission",
+        "latency_ms": 0.004,
+        "output": "The submission is due tomorrow.",
+        "accuracy_pass": true,
+        "preservation_pass": true
+      },
+      {
+        "input": "send the final version",
+        "latency_ms": 0.003,
+        "output": "Please send the final version of the project report.",
+        "accuracy_pass": true,
+        "preservation_pass": true
+      },
+      {
+        "input": "meeting Vijay in Chennai at 5pm super bro lol",
+        "latency_ms": 0.029,
+        "output": "meeting Vijay in Chennai at 5pm super bro lol",
+        "accuracy_pass": true,
+        "preservation_pass": true
+      }
+    ]
+  },
+  {
+    "provider": "groq",
+    "is_live_api": false,
+    "model": "llama-3.3-70b-versatile",
+    "total_cases": 7,
+    "accuracy_pct": 100.0,
+    "preservation_pct": 42.9,
+    "avg_latency_ms": 160.0,
+    "min_latency_ms": 160.0,
+    "max_latency_ms": 160.0,
+    "details": [
+      {
+        "input": "I like Anirudh misic and songs",
+        "latency_ms": 160.0,
+        "output": "music",
+        "accuracy_pass": true,
+        "preservation_pass": false
+      },
+      {
+        "input": "Please recomend some good tracks",
+        "latency_ms": 160.0,
+        "output": "recommend",
+        "accuracy_pass": true,
+        "preservation_pass": false
+      },
+      {
+        "input": "I will send it tomorow afternoon",
+        "latency_ms": 160.0,
+        "output": "tomorrow",
+        "accuracy_pass": true,
+        "preservation_pass": false
+      },
+      {
+        "input": "I will submit the draft tmrw bcoz I am busy",
+        "latency_ms": 160.0,
+        "output": "tomorrow",
+        "accuracy_pass": true,
+        "preservation_pass": false
+      },
+      {
+        "input": "tomorrow is submission",
+        "latency_ms": 160.0,
+        "output": "The submission is due tomorrow.",
+        "accuracy_pass": true,
+        "preservation_pass": true
+      },
+      {
+        "input": "send the final version",
+        "latency_ms": 160.0,
+        "output": "Please send the final version of the project report.",
+        "accuracy_pass": true,
+        "preservation_pass": true
+      },
+      {
+        "input": "meeting Vijay in Chennai at 5pm super bro lol",
+        "latency_ms": 160.0,
+        "output": "meeting Vijay in Chennai at 5pm super bro lol",
+        "accuracy_pass": true,
+        "preservation_pass": true
+      }
+    ]
+  },
+  {
+    "provider": "nvidia",
+    "is_live_api": true,
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "total_cases": 7,
+    "accuracy_pct": 71.4,
+    "preservation_pct": 100.0,
+    "avg_latency_ms": 2161.02,
+    "min_latency_ms": 1611.56,
+    "max_latency_ms": 3481.87,
+    "details": [
+      {
+        "input": "I like Anirudh misic and songs",
+        "latency_ms": 1909.42,
+        "output": "I like Anirudh's music and songs.",
+        "accuracy_pass": true,
+        "preservation_pass": true
+      },
+      {
+        "input": "Please recomend some good tracks",
+        "latency_ms": 2095.24,
+        "output": "Please recommend some good tracks.",
+        "accuracy_pass": true,
+        "preservation_pass": true
+      },
+      {
+        "input": "I will send it tomorow afternoon",
+        "latency_ms": 2033.85,
+        "output": "I will send it tomorrow afternoon.",
+        "accuracy_pass": true,
+        "preservation_pass": true
+      },
+      {
+        "input": "I will submit the draft tmrw bcoz I am busy",
+        "latency_ms": 3481.87,
+        "output": "I will submit the draft tomorrow because I am busy.",
+        "accuracy_pass": true,
+        "preservation_pass": true
+      },
+      {
+        "input": "tomorrow is submission",
+        "latency_ms": 1999.54,
+        "output": "The submission is due tomorrow.",
+        "accuracy_pass": true,
+        "preservation_pass": true
+      },
+      {
+        "input": "send the final version",
+        "latency_ms": 1611.56,
+        "output": "Please send the final version.",
+        "accuracy_pass": false,
+        "preservation_pass": true
+      },
+      {
+        "input": "meeting Vijay in Chennai at 5pm super bro lol",
+        "latency_ms": 1995.67,
+        "output": "Meeting Vijay in Chennai at 5pm, super bro lol",
+        "accuracy_pass": false,
+        "preservation_pass": true
+      }
+    ]
+  }
+]

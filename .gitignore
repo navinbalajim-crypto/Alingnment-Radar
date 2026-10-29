@@ -1,0 +1,65 @@
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Environment variables & secrets
+.env
+.env.*
+!.env.example
+
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs & temp
+*.log
+scratch/
+.idea/
+.vscode/
+.claude/
+
+# Local databases and backups (contain user data and OAuth tokens)
+*.db
+*.db-journal
+*.db.bak*
+*.sqlite
+
+# User-uploaded attachments and voice notes (private user data)
+backend/data/uploads/
+
+# Generated test session credentials (scripts/generate_test_session.py writes
+# <username>_session.json containing a live access_token and refresh_token)
+scripts/*_session.json
+
+# Third-party spelling and grammar corpora, and files derived from them. Kept locally for development but not
+# redistributed: their licences are unresolved (see docs/DATA_PROVENANCE.md). The runtime asset
+# data/spelling_assets.json and the project-authored data/chat_spelling_eval.json stay tracked.
+/archive/
+/archive (1)/
+/data/train_pairs.json
+/data/val_pairs.json
+/data/test_pairs.json
+/data/frequency_dictionary.txt
+/data/jfleg_clean_test.json
+/data/jfleg_clean_validation.json
+/data/dataset_metadata.json
+
+# Third-party agent skill used only as a local design aid; it reproduces Apple Human Interface Guidelines text
+# and carries no licence that permits redistribution.
+/.agents/
+/skills-lock.json
+
+# Local-only debugging helpers that read the private database or .env (mint sessions, recover OTP codes, dump
+# user rows, decrypt stored OAuth tokens). Not part of the application; kept out of the public repository.
+scripts/generate_test_session.py
+scripts/get_latest_otp.py
+scripts/inspect_db.py
+scripts/test_live_google.py
+
+# Disposable database written by backend/tests/verify_disposable_migrations.py
+backend/temp_disposable_migration_audit.db
