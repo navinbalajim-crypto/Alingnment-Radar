@@ -102,6 +102,17 @@ class Settings(BaseSettings):
     AI_COOLDOWN_SECONDS: int = 30
     LOG_LEVEL: str = "INFO"
 
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def normalize_database_url(cls, v: Any) -> str:
+        if isinstance(v, str):
+            v = v.strip()
+            if v.startswith("postgres://"):
+                return "postgresql+asyncpg://" + v[len("postgres://"):]
+            if v.startswith("postgresql://") and not v.startswith("postgresql+"):
+                return "postgresql+asyncpg://" + v[len("postgresql://"):]
+        return v
+
     @field_validator("FRONTEND_ORIGINS", mode="before")
     @classmethod
     def parse_frontend_origins(cls, v: Any) -> List[str]:
