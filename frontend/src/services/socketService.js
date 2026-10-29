@@ -1,7 +1,7 @@
 import { io } from 'socket.io-client'
 import { getAccessToken } from './apiClient'
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:8000'
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || window.location.origin
 
 class SocketService {
   constructor() {

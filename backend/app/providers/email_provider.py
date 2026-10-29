@@ -66,7 +66,7 @@ class EmailProvider:
         logger.info(f"Dispatching verification email to {recipient_email} via {provider_name} ({purpose})")
 
         if provider_name == "brevo":
-            return await self._send_via_brevo(recipient_email, subject, html_content, text_content)
+            return await self._send_via_brevo(recipient_email, subject, html_content, text_content, code=code)
         elif provider_name == "resend":
             return await self._send_via_resend(recipient_email, subject, html_content)
         else:
@@ -124,7 +124,14 @@ class EmailProvider:
 
         return configured_email, None
 
-    async def _send_via_brevo(self, recipient_email: str, subject: str, html_content: str, text_content: str) -> bool:
+    async def _send_via_brevo(
+        self,
+        recipient_email: str,
+        subject: str,
+        html_content: str,
+        text_content: str,
+        code: Optional[str] = None,
+    ) -> bool:
         if not settings.is_provider_configured("brevo"):
             if settings.APP_ENV == "development":
                 raise BadRequestError(
@@ -195,6 +202,16 @@ class EmailProvider:
                 logger.error(f"Brevo API error status={response.status_code}: {brevo_msg}")
                 if settings.APP_ENV == "testing" and not self._client:
                     logger.warning(f"[TEST] Brevo delivery returned status {response.status_code} in test suite.")
+                    return True
+                if settings.APP_ENV == "development" and code:
+                    logger.warning(
+                        f"\n==================================================\n"
+                        f"  [DEV VERIFICATION CODE]\n"
+                        f"  Recipient: {recipient_email}\n"
+                        f"  Code: {code}\n"
+                        f"  (Brevo notice: {brevo_msg})\n"
+                        f"==================================================\n"
+                    )
                     return True
                 raise BadRequestError(f"Email sending failed (Brevo): {brevo_msg}")
             return True
