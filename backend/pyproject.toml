@@ -39,3 +39,16 @@ asyncio_default_fixture_loop_scope = "function"
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 pythonpath = ["."]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
+exclude = ["alembic*", "tests*", "data*", "scratch*"]
+
+[tool.setuptools]
+py-modules = ["main"]
+
+[tool.uv]
+package = false
+
+
