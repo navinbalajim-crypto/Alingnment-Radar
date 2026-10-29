@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1'
 
 let accessToken = localStorage.getItem('ar_access_token') || null
 let refreshToken = localStorage.getItem('ar_refresh_token') || null
