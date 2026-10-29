@@ -56,6 +56,15 @@ def create_fastapi_app() -> FastAPI:
         lifespan=lifespan,
     )
 
+    @application.get("/")
+    async def root_status():
+        """Simple root endpoint so infrastructure checks and root probes do not 404."""
+        return {
+            "status": "ok",
+            "app_name": settings.APP_NAME,
+            "environment": settings.APP_ENV,
+        }
+
     # CORS configuration
     application.add_middleware(
         CORSMiddleware,
