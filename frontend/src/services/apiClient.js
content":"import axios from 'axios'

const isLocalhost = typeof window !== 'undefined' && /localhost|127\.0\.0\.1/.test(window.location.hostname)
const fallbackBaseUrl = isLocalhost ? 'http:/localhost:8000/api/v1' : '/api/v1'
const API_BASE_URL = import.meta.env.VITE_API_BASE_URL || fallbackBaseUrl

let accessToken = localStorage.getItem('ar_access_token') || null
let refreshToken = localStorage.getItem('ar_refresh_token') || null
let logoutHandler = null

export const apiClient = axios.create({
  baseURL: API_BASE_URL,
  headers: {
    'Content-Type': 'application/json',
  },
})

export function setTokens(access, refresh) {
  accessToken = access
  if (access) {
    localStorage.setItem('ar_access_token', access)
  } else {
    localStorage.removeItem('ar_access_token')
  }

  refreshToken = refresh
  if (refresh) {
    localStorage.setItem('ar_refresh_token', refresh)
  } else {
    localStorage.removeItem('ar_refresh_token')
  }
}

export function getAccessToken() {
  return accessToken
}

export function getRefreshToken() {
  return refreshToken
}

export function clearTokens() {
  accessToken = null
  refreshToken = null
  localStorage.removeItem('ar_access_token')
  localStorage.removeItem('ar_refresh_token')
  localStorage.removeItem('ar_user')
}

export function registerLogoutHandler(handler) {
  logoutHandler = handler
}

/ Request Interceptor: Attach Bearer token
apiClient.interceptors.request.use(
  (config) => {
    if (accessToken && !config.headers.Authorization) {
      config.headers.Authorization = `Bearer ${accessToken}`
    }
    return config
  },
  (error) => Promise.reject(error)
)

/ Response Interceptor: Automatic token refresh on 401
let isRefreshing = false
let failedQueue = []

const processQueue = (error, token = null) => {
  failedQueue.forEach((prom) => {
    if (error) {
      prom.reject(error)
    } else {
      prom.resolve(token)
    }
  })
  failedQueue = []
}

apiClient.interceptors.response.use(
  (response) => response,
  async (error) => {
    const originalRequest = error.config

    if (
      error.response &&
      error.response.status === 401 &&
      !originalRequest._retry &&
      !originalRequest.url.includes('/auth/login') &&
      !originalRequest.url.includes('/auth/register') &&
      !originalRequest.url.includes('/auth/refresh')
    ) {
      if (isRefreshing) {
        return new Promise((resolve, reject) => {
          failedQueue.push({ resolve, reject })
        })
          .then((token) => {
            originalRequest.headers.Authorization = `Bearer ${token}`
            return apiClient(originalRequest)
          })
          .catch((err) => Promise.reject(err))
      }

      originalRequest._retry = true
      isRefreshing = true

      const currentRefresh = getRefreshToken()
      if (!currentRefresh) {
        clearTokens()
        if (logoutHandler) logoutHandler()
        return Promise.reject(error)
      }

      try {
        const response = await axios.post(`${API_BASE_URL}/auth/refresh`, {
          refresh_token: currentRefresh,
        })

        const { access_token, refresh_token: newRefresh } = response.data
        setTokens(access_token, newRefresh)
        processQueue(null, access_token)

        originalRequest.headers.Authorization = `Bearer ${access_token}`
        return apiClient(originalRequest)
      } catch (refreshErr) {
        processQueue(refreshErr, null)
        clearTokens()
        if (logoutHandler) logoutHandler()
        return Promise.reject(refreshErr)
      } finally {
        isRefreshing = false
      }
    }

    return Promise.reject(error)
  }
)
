@@ -1,0 +1,252 @@
+"""Application configuration loaded via pydantic-settings."""
+
+import json
+from typing import Any, List, Optional
+from pydantic import field_validator, model_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+_PLACEHOLDER_SECRETS = {"replace_with_a_long_random_secret", "replace_with_a_separate_random_secret", "xxx", ""}
+
+
+class Settings(BaseSettings):
+    """Application settings with environment variable bindings."""
+
+    model_config = SettingsConfigDict(
+        env_file=(".env", "backend/.env", "../.env"),
+        env_file_encoding="utf-8",
+        extra="ignore",
+        case_sensitive=True,
+    )
+
+    APP_NAME: str = "Alignment Radar API"
+    APP_ENV: str = "development"
+    API_V1_PREFIX: str = "/api/v1"
+    FRONTEND_ORIGINS: List[str] = [
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "http://127.0.0.1:5173",
+        "https://alingnment-radar.vercel.app",
+        "https://www.alingnment-radar.vercel.app",
+    ]
+
+    # Database
+    DATABASE_URL: str = "postgresql+asyncpg://postgres@localhost:5432/alignment_radar"
+
+    # Security & Tokens
+    JWT_SECRET_KEY: str = "replace_with_a_long_random_secret"
+    JWT_ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 7
+    OTP_HMAC_SECRET: str = "replace_with_a_separate_random_secret"
+    OTP_EXPIRE_SECONDS: int = 600
+    OTP_MAX_ATTEMPTS: int = 5
+    OTP_RESEND_COOLDOWN_SECONDS: int = 60
+
+    # Email Delivery Provider Selection
+    EMAIL_PROVIDER: str = "brevo"  # "brevo" | "resend" | "auto"
+
+    # Brevo Transactional Email API (https://api.brevo.com/v3/smtp/email)
+    BREVO_API_KEY: str = "xxx"
+    BREVO_FROM_EMAIL: str = "xxx"
+    BREVO_FROM_NAME: str = "Alignment Radar"
+
+    # Resend Email API
+    RESEND_API_KEY: str = "xxx"
+    RESEND_FROM_EMAIL: str = "replace_with_your_verified_sender_email"
+
+    # NVIDIA NIM Inference
+    NVIDIA_API_KEY: str = "xxx"
+    NVIDIA_BASE_URL: str = "https://integrate.api.nvidia.com/v1"
+    NVIDIA_MODEL: str = "nvidia/nemotron-4-340b-instruct"
+    NVIDIA_TIMEOUT_SECONDS: int = 60
+    NVIDIA_ASR_API_KEY: Optional[str] = None
+    NVIDIA_TRANSLATION_API_KEY: Optional[str] = None
+    NVIDIA_ASR_FUNCTION_ID: str = "b0e8b4a5-217c-40b7-9b96-17d84e666317"
+    NVIDIA_TRANSLATE_FUNCTION_ID: str = "0778f2eb-b64d-45e7-acae-7dd9b9b35b4d"
+    NVIDIA_GRPC_SERVER: str = "grpc.nvcf.nvidia.com:443"
+
+    # Groq AI Inference
+    GROQ_API_KEY: str = "xxx"
+    GROQ_BASE_URL: str = "https://api.groq.com/openai/v1"
+    GROQ_MODEL: str = "openai/gpt-oss-120b"
+    GROQ_TIMEOUT_SECONDS: int = 30
+
+    # Nebius Token Factory Inference (OpenAI-compatible; hosts NVIDIA Nemotron open models).
+    # Only used when AI_ROUTER_STRATEGY=nebius. Default model is unverified against the live account model list.
+    NEBIUS_API_KEY: str = "xxx"
+    NEBIUS_BASE_URL: str = "https://api.tokenfactory.nebius.com/v1"
+    NEBIUS_MODEL: str = "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B"
+    NEBIUS_TIMEOUT_SECONDS: int = 30
+
+    # Adaptive AI Router Settings
+    AI_ROUTER_STRATEGY: str = "adaptive"  # "adaptive" | "nvidia" | "groq" | "nebius" | "local"
+    AI_RACING_ENABLED: bool = False  # Disabled by default; shadow/race mode only when explicitly enabled
+    AI_CIRCUIT_BREAKER_FAILURES: int = 3
+    AI_CIRCUIT_BREAKER_COOLDOWN_SECONDS: int = 30
+    AI_MIN_LATENCY_SAMPLES: int = 3
+
+    # Contextual Providers
+    YOUTUBE_DATA_API_KEY: str = "xxx"
+    SPOTIFY_CLIENT_ID: str = "xxx"
+    SPOTIFY_CLIENT_SECRET: str = "xxx"
+    TAVILY_API_KEY: str = "xxx"
+
+    # Google OAuth & Identity
+    GOOGLE_CLIENT_ID: Optional[str] = None
+    GOOGLE_CLIENT_SECRET: Optional[str] = None
+    GOOGLE_REDIRECT_URI: str = "http://localhost:5173/auth/google/callback"
+    ENCRYPTION_SECRET_KEY: Optional[str] = None
+
+    # Redis (Optional)
+    REDIS_URL: Optional[str] = None
+
+    # Feature Toggles & Limits
+    AI_ANALYSIS_ENABLED: bool = True
+    RECOMMENDATIONS_ENABLED: bool = True
+    LOCAL_SPELLING_ENGINE_ENABLED: bool = True
+    MAX_CONVERSATION_CONTEXT_MESSAGES: int = 30
+    AI_COOLDOWN_SECONDS: int = 30
+    LOG_LEVEL: str = "INFO"
+
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def normalize_database_url(cls, v: Any) -> str:
+        if isinstance(v, str):
+            v = v.strip()
+            if v.startswith("postgres://"):
+                return "postgresql+asyncpg://" + v[len("postgres://"):]
+            if v.startswith("postgresql://") and not v.startswith("postgresql+"):
+                return "postgresql+asyncpg://" + v[len("postgresql://"):]
+        return v
+
+    @field_validator("FRONTEND_ORIGINS", mode="before")
+    @classmethod
+    def parse_frontend_origins(cls, v: Any) -> List[str]:
+        if isinstance(v, list):
+            return v
+        if isinstance(v, str):
+            v = v.strip()
+            if v.startswith("[") and v.endswith("]"):
+                try:
+                    parsed = json.loads(v)
+                    if isinstance(parsed, list):
+                        return [str(item).strip() for item in parsed]
+                except Exception:
+                    pass
+            return [origin.strip() for origin in v.split(",") if origin.strip()]
+        return [
+            "http://localhost:5173",
+            "http://localhost:3000",
+            "http://127.0.0.1:5173",
+            "https://alingnment-radar.vercel.app",
+            "https://www.alingnment-radar.vercel.app",
+        ]
+
+    @model_validator(mode="after")
+    def require_real_secrets_in_production(self) -> "Settings":
+        """Refuse to start a production deployment with placeholder or short signing secrets."""
+        if self.is_production:
+            for name in ("JWT_SECRET_KEY", "OTP_HMAC_SECRET"):
+                value = getattr(self, name)
+                if value in _PLACEHOLDER_SECRETS or len(value) < 32:
+                    raise ValueError(f"{name} must be set to a random value of at least 32 characters when APP_ENV=production.")
+            if "*" in self.FRONTEND_ORIGINS:
+                raise ValueError("FRONTEND_ORIGINS must list explicit origins when APP_ENV=production.")
+        return self
+
+    @property
+    def is_production(self) -> bool:
+        return self.APP_ENV.strip().lower() == "production"
+
+    def is_provider_configured(self, provider_name: str) -> bool:
+        """Check if an external provider's credentials are configured with real values."""
+        from app.core.errors import ProviderUnavailableError
+
+        name = provider_name.lower()
+        if name == "brevo":
+            return (
+                bool(self.BREVO_API_KEY)
+                and self.BREVO_API_KEY != "xxx"
+                and bool(self.BREVO_FROM_EMAIL)
+                and self.BREVO_FROM_EMAIL != "xxx"
+            )
+        if name == "resend":
+            return bool(self.RESEND_API_KEY) and self.RESEND_API_KEY != "xxx"
+        if name in ("email", "mail"):
+            active = (self.EMAIL_PROVIDER or "brevo").lower()
+            if active == "auto":
+                return self.is_provider_configured("brevo") or self.is_provider_configured("resend")
+            return self.is_provider_configured(active)
+        if name in ("nvidia", "nemotron"):
+            return bool(self.NVIDIA_API_KEY) and self.NVIDIA_API_KEY != "xxx"
+        if name in ("nvidia_asr", "canary"):
+            k = self.NVIDIA_ASR_API_KEY or self.NVIDIA_API_KEY
+            return bool(k) and k != "xxx"
+        if name in ("nvidia_translate", "riva_translate"):
+            k = self.NVIDIA_TRANSLATION_API_KEY or self.NVIDIA_API_KEY
+            return bool(k) and k != "xxx"
+        if name in ("groq", "groq_ai"):
+            return bool(self.GROQ_API_KEY) and self.GROQ_API_KEY != "xxx"
+        if name == "nebius":
+            return bool(self.NEBIUS_API_KEY) and self.NEBIUS_API_KEY != "xxx"
+        if name == "youtube":
+            return bool(self.YOUTUBE_DATA_API_KEY) and self.YOUTUBE_DATA_API_KEY != "xxx"
+        if name == "spotify":
+            return (
+                bool(self.SPOTIFY_CLIENT_ID)
+                and self.SPOTIFY_CLIENT_ID != "xxx"
+                and bool(self.SPOTIFY_CLIENT_SECRET)
+                and self.SPOTIFY_CLIENT_SECRET != "xxx"
+            )
+        if name == "tavily":
+            return bool(self.TAVILY_API_KEY) and self.TAVILY_API_KEY != "xxx"
+        if name in ("google", "google_oauth"):
+            return (
+                bool(self.GOOGLE_CLIENT_ID)
+                and self.GOOGLE_CLIENT_ID != "xxx"
+                and bool(self.GOOGLE_CLIENT_SECRET)
+                and self.GOOGLE_CLIENT_SECRET != "xxx"
+            )
+        return False
+
+    def validate_provider_availability(self, provider_name: str) -> None:
+        """Raise an error if a requested provider is not properly configured."""
+        from app.core.errors import ProviderUnavailableError
+
+        if not self.is_provider_configured(provider_name):
+            raise ProviderUnavailableError(
+                provider=provider_name,
+                message=f"Credentials for {provider_name} are missing or set to placeholder value ('xxx').",
+            )
+
+    def startup_checks(self) -> dict[str, Any]:
+        """Perform system checks on startup and return provider statuses."""
+        return {
+            "app_name": self.APP_NAME,
+            "environment": self.APP_ENV,
+            "ai_analysis_enabled": self.AI_ANALYSIS_ENABLED,
+            "recommendations_enabled": self.RECOMMENDATIONS_ENABLED,
+            "local_spelling_engine_enabled": self.LOCAL_SPELLING_ENGINE_ENABLED,
+            "providers": {
+                "brevo": self.is_provider_configured("brevo"),
+                "resend": self.is_provider_configured("resend"),
+                "active_email_provider": self.EMAIL_PROVIDER,
+                "nvidia": self.is_provider_configured("nvidia"),
+                "groq": self.is_provider_configured("groq"),
+                "nebius": self.is_provider_configured("nebius"),
+                "youtube": self.is_provider_configured("youtube"),
+                "spotify": self.is_provider_configured("spotify"),
+                "tavily": self.is_provider_configured("tavily"),
+                "google": self.is_provider_configured("google"),
+                "redis": bool(self.REDIS_URL),
+            },
+            "ai_router": {
+                "strategy": self.AI_ROUTER_STRATEGY,
+                "racing_enabled": self.AI_RACING_ENABLED,
+                "circuit_breaker_failures": self.AI_CIRCUIT_BREAKER_FAILURES,
+                "circuit_breaker_cooldown_seconds": self.AI_CIRCUIT_BREAKER_COOLDOWN_SECONDS,
+            },
+        }
+
+
+settings = Settings()
