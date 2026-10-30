@@ -12,9 +12,29 @@ export function MeetingInvitationCard({ metadata, message, isOwn, conversationId
   const [copied, setCopied] = useState(false)
   const [isStartingNew, setIsStartingNew] = useState(false)
 
-  const meta = metadata || message?.msg_metadata || {}
-  const meetingUri = meta.meeting_uri || (message?.content?.startsWith('http') ? message.content : null)
-  const meetingCode = meta.meeting_code || 'Google Meet'
+  let meta = metadata || message?.msg_metadata || {}
+  if (typeof meta === 'string') {
+    try {
+      meta = JSON.parse(meta)
+    } catch {
+      meta = {}
+    }
+  }
+
+  let meetingUri = meta.meeting_uri || meta.meetingUri || null
+  if (!meetingUri && message?.content) {
+    const match = message.content.match(/https?:\/\/[^\s]+/)
+    if (match) meetingUri = match[0]
+  }
+
+  let meetingCode = meta.meeting_code || meta.meetingCode || null
+  if (!meetingCode && meetingUri) {
+    const parts = meetingUri.split('/')
+    meetingCode = parts[parts.length - 1]
+  }
+  if (!meetingCode) {
+    meetingCode = 'Google Meet'
+  }
   const creatorUsername = meta.creator_username || message?.sender_username || 'Participant'
 
   const createdAt = message?.created_at ? new Date(message.created_at) : null
@@ -25,19 +45,45 @@ export function MeetingInvitationCard({ metadata, message, isOwn, conversationId
     e.stopPropagation()
     if (isStartingNew || !conversationId) return
     setIsStartingNew(true)
+    let popup = null
+    try {
+      popup = window.open('about:blank', '_blank')
+    } catch {
+      popup = null
+    }
+
     try {
       const clientToken = `call_${Date.now()}`
       const result = await meetingService.createMeeting(conversationId, clientToken)
       const authRedirect = result.authorization_url || result.auth_url
       if (result.requires_auth && authRedirect) {
+        if (popup && !popup.closed) {
+          try { popup.close() } catch {}
+        }
         localStorage.setItem('ar_pending_meet_conversation_id', conversationId)
         window.location.href = authRedirect
         return
       }
-      if (result.invitation?.meeting_uri) {
-        window.open(result.invitation.meeting_uri, '_blank', 'noopener,noreferrer')
+
+      const targetUri =
+        result.invitation?.meeting_uri ||
+        result.meeting_uri ||
+        result.message?.msg_metadata?.meeting_uri ||
+        (result.message?.content?.match(/https?:\/\/[^\s]+/)?.[0])
+
+      if (targetUri) {
+        if (popup && !popup.closed) {
+          popup.location.href = targetUri
+        } else {
+          window.open(targetUri, '_blank', 'noopener,noreferrer')
+        }
+      } else if (popup && !popup.closed) {
+        popup.close()
       }
     } catch (err) {
+      if (popup && !popup.closed) {
+        try { popup.close() } catch {}
+      }
       console.error('Failed to start a new Google Meet call:', err)
     } finally {
       setIsStartingNew(false)

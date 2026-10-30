@@ -143,6 +143,8 @@ class GoogleMeetService:
                     requires_auth=False,
                     invitation=inv_read,
                     message=msg_read,
+                    meeting_uri=existing_inv.meeting_uri,
+                    meeting_code=existing_inv.meeting_code,
                     message_detail="Existing meeting invitation returned.",
                 )
 
@@ -292,5 +294,7 @@ class GoogleMeetService:
             requires_auth=False,
             invitation=inv_read,
             message=msg_read,
+            meeting_uri=meeting_uri,
+            meeting_code=meeting_code,
             message_detail="Google Meet space created successfully.",
         )

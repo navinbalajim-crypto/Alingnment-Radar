@@ -219,6 +219,7 @@ class InvitationService:
                         user_id=existing_user.id,
                         username=existing_user.username,
                         display_name=existing_user.display_name,
+                        avatar_url=existing_user.avatar_url,
                         role="member",
                         joined_at=member.joined_at or utc_now(),
                     )
@@ -301,6 +302,7 @@ class InvitationService:
                 user_id=user.id,
                 username=user.username,
                 display_name=user.display_name,
+                avatar_url=user.avatar_url,
                 role="member",
                 joined_at=member.joined_at or utc_now(),
             )

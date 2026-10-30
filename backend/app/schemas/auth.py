@@ -67,6 +67,7 @@ class UserTokenPayload(BaseModel):
     email: str
     username: str
     display_name: Optional[str] = None
+    avatar_url: Optional[str] = None
     has_password: bool = False
 
 

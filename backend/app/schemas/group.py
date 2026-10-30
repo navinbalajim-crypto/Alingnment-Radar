@@ -18,6 +18,7 @@ class GroupMemberResponse(BaseModel):
     user_id: uuid.UUID
     username: str
     display_name: Optional[str] = None
+    avatar_url: Optional[str] = None
     role: str
     joined_at: datetime
 

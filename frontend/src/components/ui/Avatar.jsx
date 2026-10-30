@@ -52,6 +52,7 @@ export function Avatar({ name, avatarUrl = null, isGroup = false, size = 'md', c
       <img
         src={src}
         alt={name || 'User avatar'}
+        referrerPolicy="no-referrer"
         onError={() => setImgFailed(true)}
         className={cn(
           'rounded-full object-cover shadow-subtle shrink-0 select-none ring-1 ring-black/5 dark:ring-white/10',

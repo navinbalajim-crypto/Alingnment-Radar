@@ -128,6 +128,11 @@ class GoogleAuthService:
 
         # 1. Check if user already exists by google_sub
         user = await self.user_repo.get_by_google_sub(google_sub)
+        if user and avatar_url and (not user.avatar_url or user.avatar_url.startswith("https://lh3.googleusercontent.com")):
+            user.avatar_url = avatar_url
+            if display_name and not user.display_name:
+                user.display_name = display_name
+            await self.session.flush()
 
         # 2. If not found by google_sub, check if an account with this email exists
         if not user:
@@ -195,6 +200,7 @@ class GoogleAuthService:
                 email=user.email,
                 username=user.username,
                 display_name=user.display_name,
+                avatar_url=user.avatar_url,
             ),
         )
 

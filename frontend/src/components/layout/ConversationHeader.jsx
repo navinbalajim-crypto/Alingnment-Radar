@@ -73,11 +73,23 @@ export function ConversationHeader({ conversation, onToggleSidebar }) {
     if (isCalling || !conversation?.id) return
     setIsCalling(true)
     setCallError(null)
+
+    // Pre-open blank tab synchronously in user click gesture to bypass browser popup blockers
+    let popup = null
+    try {
+      popup = window.open('about:blank', '_blank')
+    } catch {
+      popup = null
+    }
+
     try {
       const clientToken = `call_${Date.now()}`
       const result = await meetingService.createMeeting(conversation.id, clientToken)
       const authRedirect = result.authorization_url || result.auth_url
       if (result.requires_auth && authRedirect) {
+        if (popup && !popup.closed) {
+          try { popup.close() } catch {}
+        }
         localStorage.setItem('ar_pending_meet_conversation_id', conversation.id)
         window.location.href = authRedirect
         return
@@ -88,10 +100,26 @@ export function ConversationHeader({ conversation, onToggleSidebar }) {
           return [...prev, result.message]
         })
       }
-      if (result.invitation?.meeting_uri) {
-        window.open(result.invitation.meeting_uri, '_blank', 'noopener,noreferrer')
+
+      const targetUri =
+        result.invitation?.meeting_uri ||
+        result.meeting_uri ||
+        result.message?.msg_metadata?.meeting_uri ||
+        (result.message?.content?.match(/https?:\/\/[^\s]+/)?.[0])
+
+      if (targetUri) {
+        if (popup && !popup.closed) {
+          popup.location.href = targetUri
+        } else {
+          window.open(targetUri, '_blank', 'noopener,noreferrer')
+        }
+      } else if (popup && !popup.closed) {
+        popup.close()
       }
     } catch (err) {
+      if (popup && !popup.closed) {
+        try { popup.close() } catch {}
+      }
       console.error('Failed to create Google Meet call:', err)
       const msg =
         err.response?.data?.message ||

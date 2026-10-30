@@ -71,7 +71,7 @@ export function resolveApiUrl(path) {
   }
 
   let base = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL) || '/api/v1'
-  if (isRemote && (base.includes('localhost') || base.includes('127.0.0.1'))) {
+  if (isRemote && (base.includes('localhost') || base.includes('127.0.0.1') || !base.startsWith('http'))) {
     base = 'https://alingnment-radar.onrender.com/api/v1'
   }
 

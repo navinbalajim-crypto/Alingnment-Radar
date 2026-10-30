@@ -35,6 +35,8 @@ class MeetingCreateResponse(BaseModel):
     requires_auth: bool = Field(False, description="True if Google OAuth with Meet scope is needed")
     authorization_url: Optional[str] = Field(None, description="Google OAuth URL requesting Meet scopes")
     message_detail: Optional[str] = Field(None, description="Informational message or error description")
+    meeting_uri: Optional[str] = Field(None, description="Direct Google Meet link")
+    meeting_code: Optional[str] = Field(None, description="Meeting code for display")
     invitation: Optional[MeetingInvitationRead] = None
     message: Optional[MessageRead] = None
 
