@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Compass } from 'lucide-react'
 import { InteractiveAuthCharacter } from './InteractiveAuthCharacter'
 
@@ -52,6 +53,16 @@ export function AuthLayout({ children, overlays = null }) {
           <main className="rounded-3xl border border-white/80 bg-white/80 p-7 shadow-[0_24px_60px_-24px_rgba(52,84,118,0.28)] backdrop-blur-xl sm:p-8 dark:border-white/[0.08] dark:bg-neutral-900/80">
             {children}
           </main>
+
+          <div className="mt-4 flex items-center justify-center gap-4 text-xs text-neutral-500 dark:text-neutral-400">
+            <Link to="/privacy" className="transition-colors hover:text-neutral-800 underline-offset-4 hover:underline dark:hover:text-white">
+              Privacy Policy
+            </Link>
+            <span className="text-neutral-300 dark:text-neutral-600">•</span>
+            <Link to="/terms" className="transition-colors hover:text-neutral-800 underline-offset-4 hover:underline dark:hover:text-white">
+              Terms of Service
+            </Link>
+          </div>
         </div>
 
         {/* Right: robot companion */}

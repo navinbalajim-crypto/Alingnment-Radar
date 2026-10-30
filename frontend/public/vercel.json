@@ -8,6 +8,8 @@
     { "source": "/register", "destination": "/index.html" },
     { "source": "/chat", "destination": "/index.html" },
     { "source": "/invitations/(.*)", "destination": "/index.html" },
+    { "source": "/privacy", "destination": "/index.html" },
+    { "source": "/terms", "destination": "/index.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

@@ -535,7 +535,17 @@ function ClosingSection() {
           </Link>
         </div>
       </div>
-      <p className="mt-10 text-center text-xs text-neutral-500">© {new Date().getFullYear()} Alignment Radar</p>
+      <div className="mt-10 flex flex-wrap items-center justify-center gap-4 text-xs text-neutral-500">
+        <span>© {new Date().getFullYear()} Alignment Radar</span>
+        <span className="text-neutral-300">•</span>
+        <Link to="/privacy" className="transition-colors hover:text-neutral-900 underline-offset-4 hover:underline">
+          Privacy Policy
+        </Link>
+        <span className="text-neutral-300">•</span>
+        <Link to="/terms" className="transition-colors hover:text-neutral-900 underline-offset-4 hover:underline">
+          Terms of Service
+        </Link>
+      </div>
     </section>
   )
 }

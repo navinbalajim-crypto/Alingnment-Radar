@@ -34,19 +34,13 @@ export function VoiceMessagePlayer({ message, isOwn }) {
   const [duration, setDuration] = useState(
     transcript?.duration_seconds || message.msg_metadata?.duration_seconds || 0
   )
-  const [showTranscript, setShowTranscript] = useState(Boolean(originalText))
+  const [showTranscript, setShowTranscript] = useState(false)
   const [selectedLanguage, setSelectedLanguage] = useState('es')
   const [isTranslating, setIsTranslating] = useState(false)
   const [isRetrying, setIsRetrying] = useState(false)
   const [translationError, setTranslationError] = useState(null)
 
   const audioRef = useRef(null)
-
-  useEffect(() => {
-    if (originalText) {
-      setShowTranscript(true)
-    }
-  }, [originalText])
 
   useEffect(() => {
     const d = transcript?.duration_seconds || message.msg_metadata?.duration_seconds || 0

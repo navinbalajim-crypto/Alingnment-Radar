@@ -6,6 +6,8 @@ import { RegisterPage } from '../components/auth/RegisterPage'
 import { GoogleCallbackPage } from '../components/auth/GoogleCallbackPage'
 import { JoinGroupPage } from '../components/groups/JoinGroupPage'
 import { LandingPage } from '../components/landing/LandingPage'
+import { PrivacyPolicyPage } from '../components/legal/PrivacyPolicyPage'
+import { TermsOfServicePage } from '../components/legal/TermsOfServicePage'
 import { useAuth } from '../context/AuthContext'
 
 function ProtectedRoute({ children }) {
@@ -85,6 +87,14 @@ export const router = createBrowserRouter([
   {
     path: '/invitations/:token',
     element: <JoinGroupPage />,
+  },
+  {
+    path: '/privacy',
+    element: <PrivacyPolicyPage />,
+  },
+  {
+    path: '/terms',
+    element: <TermsOfServicePage />,
   },
   {
     path: '*',
