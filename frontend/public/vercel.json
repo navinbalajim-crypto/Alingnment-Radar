@@ -10,6 +10,7 @@
     { "source": "/invitations/(.*)", "destination": "/index.html" },
     { "source": "/privacy", "destination": "/index.html" },
     { "source": "/terms", "destination": "/index.html" },
+    { "source": "/google8a6d50f5eedb5b8e.html", "destination": "/google8a6d50f5eedb5b8e.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

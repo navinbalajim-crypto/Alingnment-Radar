@@ -46,6 +46,10 @@
       "destination": "/index.html"
     },
     {
+      "source": "/google8a6d50f5eedb5b8e.html",
+      "destination": "/google8a6d50f5eedb5b8e.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
