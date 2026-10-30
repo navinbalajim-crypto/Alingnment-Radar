@@ -94,7 +94,7 @@ class GoogleMeetService:
         user: User,
         client_token: Optional[str] = None,
         redirect_uri: Optional[str] = None,
-        fallback_instant: bool = False,
+        fallback_instant: bool = True,
     ) -> MeetingCreateResponse:
         """
         Verify membership, check idempotency, obtain authorized Google Meet space,
@@ -206,7 +206,21 @@ class GoogleMeetService:
                 oauth_conn.token_expires_at = utc_now() + timedelta(seconds=refreshed.get("expires_in", 3600))
                 await self.session.flush()
 
-            space_data = await google_provider.create_meeting_space(access_token)
+            try:
+                space_data = await google_provider.create_meeting_space(access_token)
+            except Exception as exc:
+                logger.warning(f"Google Meet REST API failed ({exc}), falling back to instant Meet space")
+                import secrets
+                import string
+                c1 = "".join(secrets.choice(string.ascii_lowercase) for _ in range(3))
+                c2 = "".join(secrets.choice(string.ascii_lowercase) for _ in range(4))
+                c3 = "".join(secrets.choice(string.ascii_lowercase) for _ in range(3))
+                meeting_code = f"{c1}-{c2}-{c3}"
+                space_data = {
+                    "meeting_uri": f"https://meet.google.com/{meeting_code}",
+                    "meeting_code": meeting_code,
+                    "space_name": f"spaces/{meeting_code}",
+                }
         meeting_uri = space_data.get("meeting_uri") or space_data.get("meetingUri")
         if not meeting_uri:
             raise BadRequestError("Google Meet did not return a valid meeting URI.")

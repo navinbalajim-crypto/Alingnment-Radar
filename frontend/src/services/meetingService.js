@@ -5,7 +5,7 @@ export const meetingService = {
    * Request Google Meet meeting creation for a conversation.
    * If Google Meet scope is missing or unauthenticated, response contains `requires_auth: true` and `authorization_url`.
    */
-  async createMeeting(conversationId, clientToken = null, redirectUri = null, fallbackInstant = false) {
+  async createMeeting(conversationId, clientToken = null, redirectUri = null, fallbackInstant = true) {
     const res = await apiClient.post(`/conversations/${conversationId}/meet`, {
       client_token: clientToken,
       redirect_uri: redirectUri || `${window.location.origin}/auth/google/callback`,

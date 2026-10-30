@@ -33,7 +33,7 @@ async def create_google_meet(
     service = GoogleMeetService(db)
     client_token = payload.client_token if payload else None
     redirect_uri = payload.redirect_uri if payload else None
-    fallback_instant = payload.fallback_instant if payload else False
+    fallback_instant = payload.fallback_instant if (payload and payload.fallback_instant is not None) else True
     return await service.create_or_get_meeting(
         conversation_id=conversation_id,
         user=current_user,

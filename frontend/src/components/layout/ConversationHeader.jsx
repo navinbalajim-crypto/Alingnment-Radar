@@ -7,7 +7,7 @@ import { meetingService } from '../../services/meetingService'
 import { Info, Menu, Compass, Sparkles, Bell, Phone, Loader2, AlertCircle } from 'lucide-react'
 
 export function ConversationHeader({ conversation, onToggleSidebar }) {
-  const { socketStatus, triggerAlignment, requestRecommendations, onlineUserIds = new Set(), groupOnlineCounts = {}, presenceReady = false } = useChat()
+  const { socketStatus, triggerAlignment, requestRecommendations, onlineUserIds = new Set(), groupOnlineCounts = {}, presenceReady = false, setMessages } = useChat()
   const [isDetailsOpen, setIsDetailsOpen] = useState(false)
   const [isRemindersOpen, setIsRemindersOpen] = useState(false)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
@@ -75,14 +75,18 @@ export function ConversationHeader({ conversation, onToggleSidebar }) {
     setCallError(null)
     try {
       const clientToken = `call_${Date.now()}`
-      const result = isInstant
-        ? await meetingService.createMeeting(conversation.id, clientToken, null, true)
-        : await meetingService.createMeeting(conversation.id, clientToken)
+      const result = await meetingService.createMeeting(conversation.id, clientToken)
       const authRedirect = result.authorization_url || result.auth_url
       if (result.requires_auth && authRedirect) {
         localStorage.setItem('ar_pending_meet_conversation_id', conversation.id)
         window.location.href = authRedirect
         return
+      }
+      if (result.message && typeof setMessages === 'function') {
+        setMessages((prev) => {
+          if (prev.some((m) => m && m.id === result.message.id)) return prev
+          return [...prev, result.message]
+        })
       }
       if (result.invitation?.meeting_uri) {
         window.open(result.invitation.meeting_uri, '_blank', 'noopener,noreferrer')

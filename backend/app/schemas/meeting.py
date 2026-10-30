@@ -28,7 +28,7 @@ class MeetingInvitationRead(BaseModel):
 class MeetingCreateRequest(BaseModel):
     client_token: Optional[str] = Field(None, max_length=64, description="Client idempotency key")
     redirect_uri: Optional[str] = Field(None, description="Frontend origin's OAuth callback URL, so the Google consent redirect lands back on the same origin the user is browsing from")
-    fallback_instant: Optional[bool] = Field(False, description="Generate instant Google Meet link without requiring OAuth")
+    fallback_instant: Optional[bool] = Field(True, description="Generate instant Google Meet link without requiring OAuth")
 
 
 class MeetingCreateResponse(BaseModel):

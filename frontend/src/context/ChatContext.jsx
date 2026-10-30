@@ -930,6 +930,7 @@ export function ChatProvider({ children }) {
         activeConversationId,
         activeConversation,
         messages,
+        setMessages,
         hasMoreMessages,
         isLoadingMessages,
         aiFindings,
