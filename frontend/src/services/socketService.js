@@ -1,7 +1,17 @@
 import { io } from 'socket.io-client'
 import { getAccessToken } from './apiClient'
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || window.location.origin
+function getSocketUrl() {
+  const envUrl = import.meta.env.VITE_SOCKET_URL
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    if (!envUrl || envUrl.includes('localhost') || envUrl.includes('127.0.0.1')) {
+      return 'https://alingnment-radar.onrender.com'
+    }
+  }
+  return envUrl || (typeof window !== 'undefined' ? window.location.origin : 'https://alingnment-radar.onrender.com')
+}
+
+const SOCKET_URL = getSocketUrl()
 
 class SocketService {
   constructor() {

@@ -32,9 +32,22 @@ export function Avatar({ name, avatarUrl = null, isGroup = false, size = 'md', c
   }
 
   if (avatarUrl && !imgFailed) {
-    const token = (typeof localStorage !== 'undefined' && localStorage.getItem('ar_access_token')) || ''
-    const rawSrc = `${avatarUrl}${avatarUrl.includes('?') ? '&' : '?'}token=${encodeURIComponent(token)}`
-    const src = resolveApiUrl(rawSrc)
+    const isExternal =
+      (avatarUrl.startsWith('http://') || avatarUrl.startsWith('https://')) &&
+      !avatarUrl.includes('/api/v1/users') &&
+      !avatarUrl.includes('/api/v1/groups') &&
+      !avatarUrl.includes('onrender.com')
+
+    let src = avatarUrl
+    if (!isExternal) {
+      const token = (typeof localStorage !== 'undefined' && localStorage.getItem('ar_access_token')) || ''
+      if (token && !avatarUrl.includes('token=')) {
+        const separator = avatarUrl.includes('?') ? '&' : '?'
+        src = `${avatarUrl}${separator}token=${encodeURIComponent(token)}`
+      }
+      src = resolveApiUrl(src)
+    }
+
     return (
       <img
         src={src}

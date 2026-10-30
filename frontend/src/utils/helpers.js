@@ -56,15 +56,25 @@ export function getAvatarColor(identifier = '') {
  */
 export function resolveApiUrl(path) {
   if (!path) return ''
-  if (
-    path.startsWith('http://') ||
-    path.startsWith('https://') ||
-    path.startsWith('blob:') ||
-    path.startsWith('data:')
-  ) {
+  if (path.startsWith('blob:') || path.startsWith('data:')) {
     return path
   }
-  const base = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL) || '/api/v1'
+
+  const isBrowser = typeof window !== 'undefined'
+  const isRemote = isBrowser && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
+
+  if (path.startsWith('http://') || path.startsWith('https://')) {
+    if (isRemote && (path.includes('localhost') || path.includes('127.0.0.1'))) {
+      return path.replace(/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/api\/v1/, 'https://alingnment-radar.onrender.com/api/v1')
+    }
+    return path
+  }
+
+  let base = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL) || '/api/v1'
+  if (isRemote && (base.includes('localhost') || base.includes('127.0.0.1'))) {
+    base = 'https://alingnment-radar.onrender.com/api/v1'
+  }
+
   if (base.startsWith('http://') || base.startsWith('https://')) {
     const cleanPath = path.startsWith('/api/v1') ? path.slice(7) : path
     const cleanBase = base.endsWith('/') ? base.slice(0, -1) : base

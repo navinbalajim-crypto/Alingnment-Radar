@@ -70,7 +70,13 @@ export function ChatProvider({ children }) {
     if (!isAuthenticated) return
     try {
       const data = await conversationService.listConversations()
-      setConversations(Array.isArray(data) ? data : [])
+      const convList = Array.isArray(data) ? data : []
+      setConversations(convList)
+      setActiveConversation((prev) => {
+        if (!prev) return prev
+        const match = convList.find((c) => c && c.id === prev.id)
+        return match ? { ...prev, ...match } : prev
+      })
     } catch (err) {
       console.error('Failed to load conversations:', err)
     }

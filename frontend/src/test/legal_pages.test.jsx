@@ -41,3 +41,4 @@ describe('Legal Pages', () => {
     expect(screen.getByText(/terms@alignmentradar.com/i)).toBeInTheDocument()
   })
 })
+

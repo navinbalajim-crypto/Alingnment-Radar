@@ -69,10 +69,8 @@ async def upload_avatar(
 @router.get("/{user_id}/avatar", status_code=status.HTTP_200_OK)
 async def get_avatar(
     user_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
 ):
-    """Serve a user's profile picture. Requires authentication; any signed-in user may view
-    any other user's avatar, consistent with avatars being visible wherever a user appears
+    """Serve a user's profile picture. Consistent with avatars being visible wherever a user appears
     (search results, contacts, group member lists)."""
     found = AvatarService.get_avatar_file(user_id)
     if not found:
@@ -83,7 +81,7 @@ async def get_avatar(
         media_type=content_type,
         # Safe to cache long-term: the URL is versioned with a `?v=` query param that
         # changes on every re-upload, so a cached response can never go stale.
-        headers={"X-Content-Type-Options": "nosniff", "Cache-Control": "private, max-age=31536000, immutable"},
+        headers={"X-Content-Type-Options": "nosniff", "Cache-Control": "public, max-age=31536000, immutable"},
     )
 
 

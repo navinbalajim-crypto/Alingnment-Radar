@@ -1,6 +1,16 @@
 import axios from 'axios'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1'
+function getBaseUrl() {
+  const envUrl = import.meta.env.VITE_API_BASE_URL
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    if (!envUrl || envUrl.includes('localhost') || envUrl.includes('127.0.0.1')) {
+      return '/api/v1'
+    }
+  }
+  return envUrl || '/api/v1'
+}
+
+const API_BASE_URL = getBaseUrl()
 
 let accessToken = localStorage.getItem('ar_access_token') || null
 let refreshToken = localStorage.getItem('ar_refresh_token') || null

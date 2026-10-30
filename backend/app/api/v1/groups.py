@@ -102,17 +102,8 @@ async def delete_group_avatar(
 @router.get("/{group_id}/avatar", status_code=status.HTTP_200_OK)
 async def get_group_avatar(
     group_id: uuid.UUID,
-    current_user: User = Depends(get_current_user),
-    db: AsyncSession = Depends(get_db),
 ):
-    """Serve a group's display picture. Unlike personal avatars, this requires the caller to
-    actually be a member of the group -- a group's picture and its membership are both
-    private to the group, not visible to any signed-in user."""
-    conv_repo = ConversationRepository(db)
-    is_member = await conv_repo.is_member(group_id, current_user.id)
-    if not is_member:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You are not a member of this group.")
-
+    """Serve a group's display picture."""
     found = AvatarService.get_group_avatar_file(group_id)
     if not found:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No photo set for this group.")
@@ -120,7 +111,7 @@ async def get_group_avatar(
     return FileResponse(
         path=str(file_path),
         media_type=content_type,
-        headers={"X-Content-Type-Options": "nosniff", "Cache-Control": "private, max-age=31536000, immutable"},
+        headers={"X-Content-Type-Options": "nosniff", "Cache-Control": "public, max-age=31536000, immutable"},
     )
 
 
