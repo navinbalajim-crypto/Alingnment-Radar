@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import { formatMessageTime } from '../../utils/date'
 import { useAuth } from '../../context/AuthContext'
 import { useChat } from '../../context/ChatContext'
-import { cn } from '../../utils/helpers'
+import { cn, resolveApiUrl } from '../../utils/helpers'
 import {
   Clock,
   AlertCircle,
@@ -343,7 +343,7 @@ export function MessageBubble({ message }) {
               <div className="mt-2 space-y-2" data-testid="message-attachments-container">
                 {attachments.map((att) => {
                   const isImage = att.content_type?.startsWith('image/')
-                  const downloadUrl = `/api/v1/conversations/${message.conversation_id}/attachments/${att.id}${token ? `?token=${encodeURIComponent(token)}` : ''}`
+                  const downloadUrl = resolveApiUrl(`/api/v1/conversations/${message.conversation_id}/attachments/${att.id}${token ? `?token=${encodeURIComponent(token)}` : ''}`)
 
                   if (isImage) {
                     return (

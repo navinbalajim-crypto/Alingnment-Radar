@@ -13,7 +13,7 @@ import {
   Globe,
 } from 'lucide-react'
 import { voiceService, SUPPORTED_VOICE_LANGUAGES } from '../../services/voiceService'
-import { cn } from '../../utils/helpers'
+import { cn, resolveApiUrl } from '../../utils/helpers'
 
 function formatSeconds(secs) {
   if (isNaN(secs) || secs < 0) return '0:00'
@@ -23,10 +23,18 @@ function formatSeconds(secs) {
 }
 
 export function VoiceMessagePlayer({ message, isOwn }) {
+  const transcript = message.voice_transcript || null
+  const originalText = transcript?.transcript_text || ''
+  const status = transcript?.transcription_status || 'uploaded'
+  const sourceLang = transcript?.source_language || 'en'
+  const translations = transcript?.translations || {}
+
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
-  const [duration, setDuration] = useState(message.voice_transcript?.duration_seconds || 0)
-  const [showTranscript, setShowTranscript] = useState(false)
+  const [duration, setDuration] = useState(
+    transcript?.duration_seconds || message.msg_metadata?.duration_seconds || 0
+  )
+  const [showTranscript, setShowTranscript] = useState(Boolean(originalText))
   const [selectedLanguage, setSelectedLanguage] = useState('es')
   const [isTranslating, setIsTranslating] = useState(false)
   const [isRetrying, setIsRetrying] = useState(false)
@@ -34,16 +42,29 @@ export function VoiceMessagePlayer({ message, isOwn }) {
 
   const audioRef = useRef(null)
 
+  useEffect(() => {
+    if (originalText) {
+      setShowTranscript(true)
+    }
+  }, [originalText])
+
+  useEffect(() => {
+    const d = transcript?.duration_seconds || message.msg_metadata?.duration_seconds || 0
+    if (d > 0) setDuration(d)
+  }, [transcript?.duration_seconds, message.msg_metadata?.duration_seconds])
+
   // Find audio attachment
   const attachments = Array.isArray(message.attachments) ? message.attachments : []
-  const audioAttachment = attachments.find(
-    (att) =>
-      att.content_type?.startsWith('audio/') ||
-      att.original_filename?.endsWith('.webm') ||
-      att.original_filename?.endsWith('.ogg') ||
-      att.original_filename?.endsWith('.wav') ||
-      att.original_filename?.endsWith('.mp3')
-  )
+  const audioAttachment =
+    attachments.find(
+      (att) =>
+        att.content_type?.startsWith('audio/') ||
+        att.original_filename?.endsWith('.webm') ||
+        att.original_filename?.endsWith('.ogg') ||
+        att.original_filename?.endsWith('.wav') ||
+        att.original_filename?.endsWith('.mp3') ||
+        att.original_filename?.endsWith('.m4a')
+    ) || attachments[0]
 
   const attachmentId =
     audioAttachment?.id ||
@@ -51,16 +72,15 @@ export function VoiceMessagePlayer({ message, isOwn }) {
     message.msg_metadata?.attachment_id ||
     null
 
-  const token = localStorage.getItem('ar_access_token') || ''
+  const token = (typeof localStorage !== 'undefined' && localStorage.getItem('ar_access_token')) || ''
   const audioSrc = attachmentId
-    ? `/api/v1/conversations/${message.conversation_id}/attachments/${attachmentId}${token ? `?token=${encodeURIComponent(token)}` : ''}`
+    ? resolveApiUrl(
+        `/api/v1/conversations/${message.conversation_id}/attachments/${attachmentId}${
+          token ? `?token=${encodeURIComponent(token)}` : ''
+        }`
+      )
     : null
 
-  const transcript = message.voice_transcript || null
-  const status = transcript?.transcription_status || 'uploaded'
-  const originalText = transcript?.transcript_text || ''
-  const sourceLang = transcript?.source_language || 'en'
-  const translations = transcript?.translations || {}
   const activeTranslation = translations[selectedLanguage] || null
 
   const togglePlay = () => {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getInitials, getAvatarColor, cn } from '../../utils/helpers'
+import { getInitials, getAvatarColor, cn, resolveApiUrl } from '../../utils/helpers'
 import { Users } from 'lucide-react'
 
 export function Avatar({ name, avatarUrl = null, isGroup = false, size = 'md', className = '' }) {
@@ -33,7 +33,8 @@ export function Avatar({ name, avatarUrl = null, isGroup = false, size = 'md', c
 
   if (avatarUrl && !imgFailed) {
     const token = (typeof localStorage !== 'undefined' && localStorage.getItem('ar_access_token')) || ''
-    const src = `${avatarUrl}${avatarUrl.includes('?') ? '&' : '?'}token=${encodeURIComponent(token)}`
+    const rawSrc = `${avatarUrl}${avatarUrl.includes('?') ? '&' : '?'}token=${encodeURIComponent(token)}`
+    const src = resolveApiUrl(rawSrc)
     return (
       <img
         src={src}

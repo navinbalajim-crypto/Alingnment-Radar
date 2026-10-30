@@ -49,3 +49,26 @@ export function getAvatarColor(identifier = '') {
   const index = Math.abs(hash) % colors.length
   return colors[index]
 }
+
+/**
+ * Resolves a backend relative API or media path (e.g. /api/v1/users/.../avatar)
+ * to an absolute backend URL if VITE_API_BASE_URL is configured as an absolute URL.
+ */
+export function resolveApiUrl(path) {
+  if (!path) return ''
+  if (
+    path.startsWith('http://') ||
+    path.startsWith('https://') ||
+    path.startsWith('blob:') ||
+    path.startsWith('data:')
+  ) {
+    return path
+  }
+  const base = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL) || '/api/v1'
+  if (base.startsWith('http://') || base.startsWith('https://')) {
+    const cleanPath = path.startsWith('/api/v1') ? path.slice(7) : path
+    const cleanBase = base.endsWith('/') ? base.slice(0, -1) : base
+    return `${cleanBase}${cleanPath.startsWith('/') ? '' : '/'}${cleanPath}`
+  }
+  return path
+}

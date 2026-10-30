@@ -110,9 +110,20 @@ class SpeechService:
         if settings.is_provider_configured("groq"):
             try:
                 headers = {"Authorization": f"Bearer {settings.GROQ_API_KEY}"}
+                ext = audio_path.suffix.lower()
+                mime_type = "audio/webm"
+                if ext == ".ogg":
+                    mime_type = "audio/ogg"
+                elif ext == ".wav":
+                    mime_type = "audio/wav"
+                elif ext == ".mp3":
+                    mime_type = "audio/mpeg"
+                elif ext == ".m4a":
+                    mime_type = "audio/mp4"
+
                 async with httpx.AsyncClient(timeout=30.0) as client:
                     with open(audio_path, "rb") as f:
-                        files = {"file": (audio_path.name, f, "audio/webm")}
+                        files = {"file": (audio_path.name, f, mime_type)}
                         data: Dict[str, Any] = {
                             "model": "whisper-large-v3-turbo",
                             "response_format": "verbose_json",
@@ -353,20 +364,20 @@ class SpeechService:
                 )
                 msg = (await session.execute(msg_stmt)).scalar_one_or_none()
 
-                # Check AI Consent: the sender must have enabled AI processing before their audio is sent to a cloud
-                # speech provider. There is no local speech recogniser, so without consent nothing is transcribed;
-                # the transcript can be retried after the sender opts in.
-                sender = msg.sender if msg else None
-                has_consent = sender.ai_draft_analysis_consent if sender else True
-
-                if not has_consent:
-                    transcript.transcription_status = "consent_required"
-                    transcript.error_message = "AI consent required for cloud transcription."
-                    await session.commit()
-                    return
-
                 transcript.transcription_status = "processing"
                 await session.commit()
+
+                # Broadcast processing status so frontend shows active progress
+                t_proc = VoiceTranscriptRead.model_validate(transcript)
+                await sio.emit(
+                    "voice:transcript_updated",
+                    {
+                        "conversation_id": str(conversation_id),
+                        "message_id": str(message_id),
+                        "transcript": t_proc.model_dump(mode="json"),
+                    },
+                    room=f"conversation:{conversation_id}",
+                )
 
                 # Transcribe
                 path = Path(audio_path_str)

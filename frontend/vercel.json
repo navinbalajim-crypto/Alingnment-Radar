@@ -1,5 +1,8 @@
 {
   "rewrites": [
+    { "source": "/api/(.*)", "destination": "https://alingnment-radar.onrender.com/api/$1" },
+    { "source": "/socket.io/(.*)", "destination": "https://alingnment-radar.onrender.com/socket.io/$1" },
+    { "source": "/health", "destination": "https://alingnment-radar.onrender.com/health" },
     { "source": "/auth/google/callback", "destination": "/index.html" },
     { "source": "/login", "destination": "/index.html" },
     { "source": "/register", "destination": "/index.html" },

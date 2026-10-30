@@ -884,6 +884,29 @@ export function ChatProvider({ children }) {
           replyToId
         )
         setReplyTo(null)
+        if (result?.message) {
+          const freshMsg = result.message
+          setMessages((prev) => {
+            const existingIndex = prev.findIndex(
+              (m) =>
+                (m.client_id && m.client_id === freshMsg.client_id) ||
+                m.id === freshMsg.id
+            )
+            if (existingIndex >= 0) {
+              const updated = [...prev]
+              updated[existingIndex] = { ...freshMsg, isOptimistic: false }
+              return updated
+            }
+            return [...prev, freshMsg]
+          })
+          setConversations((prev) =>
+            prev.map((c) =>
+              c.id === freshMsg.conversation_id
+                ? { ...c, last_message: freshMsg, updated_at: freshMsg.created_at }
+                : c
+            )
+          )
+        }
         return result
       } catch (err) {
         console.error('Failed to send voice note:', err)
