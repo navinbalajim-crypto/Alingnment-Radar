@@ -66,3 +66,8 @@ async def init_db_models() -> None:
     """Create all database tables (used for tests or rapid local prototyping)."""
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        try:
+            await conn.execute(text("ALTER TABLE users ALTER COLUMN avatar_url TYPE TEXT;"))
+            await conn.execute(text("ALTER TABLE conversations ALTER COLUMN avatar_url TYPE TEXT;"))
+        except Exception:
+            pass

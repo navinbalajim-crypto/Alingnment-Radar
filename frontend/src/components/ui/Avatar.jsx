@@ -32,11 +32,13 @@ export function Avatar({ name, avatarUrl = null, isGroup = false, size = 'md', c
   }
 
   if (avatarUrl && !imgFailed) {
+    const isDataOrBlob = avatarUrl.startsWith('data:') || avatarUrl.startsWith('blob:')
     const isExternal =
-      (avatarUrl.startsWith('http://') || avatarUrl.startsWith('https://')) &&
+      isDataOrBlob ||
+      ((avatarUrl.startsWith('http://') || avatarUrl.startsWith('https://')) &&
       !avatarUrl.includes('/api/v1/users') &&
       !avatarUrl.includes('/api/v1/groups') &&
-      !avatarUrl.includes('onrender.com')
+      !avatarUrl.includes('onrender.com'))
 
     let src = avatarUrl
     if (!isExternal) {

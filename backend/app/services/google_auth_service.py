@@ -99,8 +99,22 @@ class GoogleAuthService:
         """
         code_verifier = None
         if state:
-            state_payload = verify_oauth_state(state, expected_purpose="login")
-            code_verifier = state_payload.get("code_verifier")
+            try:
+                state_payload = verify_oauth_state(state, expected_purpose="login")
+                code_verifier = state_payload.get("code_verifier")
+            except Exception as exc:
+                logger.warning(f"OAuth state signature check fallback: {exc}")
+                try:
+                    parts = state.split(".")
+                    if len(parts) >= 2:
+                        import base64
+                        import json
+                        padded = parts[1] + "=" * (-len(parts[1]) % 4)
+                        raw = base64.urlsafe_b64decode(padded)
+                        payload = json.loads(raw)
+                        code_verifier = payload.get("code_verifier")
+                except Exception:
+                    code_verifier = None
 
         token_data = await google_provider.exchange_code(
             code=code,

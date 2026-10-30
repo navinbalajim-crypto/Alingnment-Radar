@@ -170,14 +170,9 @@ class GoogleMeetService:
                     authorization_url=auth_url,
                     message_detail="Google Meet authorization required to create meeting spaces.",
                 )
-            import secrets
-            import string
-            c1 = "".join(secrets.choice(string.ascii_lowercase) for _ in range(3))
-            c2 = "".join(secrets.choice(string.ascii_lowercase) for _ in range(4))
-            c3 = "".join(secrets.choice(string.ascii_lowercase) for _ in range(3))
-            meeting_code = f"{c1}-{c2}-{c3}"
-            meeting_uri = f"https://meet.google.com/{meeting_code}"
-            space_name = f"spaces/{meeting_code}"
+            meeting_uri = "https://meet.google.com/new"
+            meeting_code = "Instant Call"
+            space_name = "spaces/new"
             space_data = {
                 "meeting_uri": meeting_uri,
                 "meeting_code": meeting_code,
@@ -212,16 +207,10 @@ class GoogleMeetService:
                 space_data = await google_provider.create_meeting_space(access_token)
             except Exception as exc:
                 logger.warning(f"Google Meet REST API failed ({exc}), falling back to instant Meet space")
-                import secrets
-                import string
-                c1 = "".join(secrets.choice(string.ascii_lowercase) for _ in range(3))
-                c2 = "".join(secrets.choice(string.ascii_lowercase) for _ in range(4))
-                c3 = "".join(secrets.choice(string.ascii_lowercase) for _ in range(3))
-                meeting_code = f"{c1}-{c2}-{c3}"
                 space_data = {
-                    "meeting_uri": f"https://meet.google.com/{meeting_code}",
-                    "meeting_code": meeting_code,
-                    "space_name": f"spaces/{meeting_code}",
+                    "meeting_uri": "https://meet.google.com/new",
+                    "meeting_code": "Instant Call",
+                    "space_name": "spaces/new",
                 }
         meeting_uri = space_data.get("meeting_uri") or space_data.get("meetingUri")
         if not meeting_uri:

@@ -3,7 +3,7 @@
 import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING, List, Optional
-from sqlalchemy import Boolean, DateTime, ForeignKey, Index, String, UniqueConstraint, Uuid
+from sqlalchemy import Boolean, DateTime, ForeignKey, Index, String, Text, UniqueConstraint, Uuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base, utc_now
 
@@ -26,7 +26,7 @@ class Conversation(Base):
     created_by_id: Mapped[Optional[uuid.UUID]] = mapped_column(Uuid, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     # Group display picture only; always null for direct conversations (they use the other
     # participant's personal avatar_url instead).
-    avatar_url: Mapped[Optional[str]] = mapped_column(String(1024), nullable=True)
+    avatar_url: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
 
     # For direct 1-to-1 chats: sorted pair of user UUIDs ensures strict DB-level uniqueness
     direct_user_low_id: Mapped[Optional[uuid.UUID]] = mapped_column(Uuid, nullable=True, index=True)

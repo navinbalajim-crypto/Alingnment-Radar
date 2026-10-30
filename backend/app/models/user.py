@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING, List, Optional
 import sqlalchemy as sa
-from sqlalchemy import Boolean, DateTime, Index, String, Uuid, func
+from sqlalchemy import Boolean, DateTime, Index, String, Text, Uuid, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base, utc_now
 
@@ -28,7 +28,7 @@ class User(Base):
     username_normalized: Mapped[str] = mapped_column(String(50), unique=True, index=True, nullable=False)
     display_name: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     google_sub: Mapped[Optional[str]] = mapped_column(String(255), unique=True, index=True, nullable=True)
-    avatar_url: Mapped[Optional[str]] = mapped_column(String(1024), nullable=True)
+    avatar_url: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     password_hash: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     # Explicit opt-ins for sending *unsent* draft text to external services. Always default to off.

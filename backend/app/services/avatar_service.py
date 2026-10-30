@@ -4,6 +4,7 @@ extension allowlist, magic-byte signature check, and a server-controlled filenam
 derived from user input) -- and are stored in their own directories so a group's image can
 never collide with, or be confused for, a user's personal avatar."""
 
+import base64
 import time
 import uuid
 from pathlib import Path
@@ -32,9 +33,9 @@ AVATAR_DIR = _UPLOADS_ROOT / "avatars"
 GROUP_AVATAR_DIR = _UPLOADS_ROOT / "group_avatars"
 
 
-async def _validate_and_store(directory: Path, filename_stem: str, upload_file: UploadFile) -> Tuple[Path, Path, str]:
+async def _validate_and_store(directory: Path, filename_stem: str, upload_file: UploadFile) -> Tuple[Path, Path, str, bytes]:
     """Shared validation + atomic write used by both personal and group avatars. Returns
-    (target_path, ext, content_type). Raises BadRequestError on any invalid input, writing
+    (target_path, tmp_path, ext, file_bytes). Raises BadRequestError on any invalid input, writing
     only to a temp file so an existing image is never touched by a failed upload."""
     directory.mkdir(parents=True, exist_ok=True)
     original_name = Path(upload_file.filename or "").name
@@ -49,6 +50,7 @@ async def _validate_and_store(directory: Path, filename_stem: str, upload_file: 
 
     total_bytes = 0
     first_chunk = True
+    all_chunks = []
     try:
         with open(tmp_path, "wb") as f:
             while True:
@@ -63,6 +65,7 @@ async def _validate_and_store(directory: Path, filename_stem: str, upload_file: 
                     if not _validate_magic_bytes(chunk_bytes[:64], ext):
                         raise BadRequestError("File signature does not match the expected image format.")
                 f.write(chunk_bytes)
+                all_chunks.append(chunk_bytes)
         if total_bytes == 0:
             raise BadRequestError("Cannot upload an empty file.")
     except Exception:
@@ -70,7 +73,7 @@ async def _validate_and_store(directory: Path, filename_stem: str, upload_file: 
             tmp_path.unlink(missing_ok=True)
         raise
 
-    return target_path, tmp_path, ext
+    return target_path, tmp_path, ext, b"".join(all_chunks)
 
 
 def _remove_existing_files(directory: Path, filename_stem: str, keep_ext: Optional[str] = None) -> None:
@@ -100,17 +103,18 @@ class AvatarService:
 
     async def set_avatar(self, user: User, upload_file: UploadFile) -> str:
         """Validate and store a new avatar image for `user`, replacing any previous one.
-        Returns the public URL to fetch it. Raises BadRequestError on invalid input,
-        leaving the user's existing avatar untouched."""
-        target_path, tmp_path, ext = await _validate_and_store(AVATAR_DIR, user.id.hex, upload_file)
+        Stores the image directly in the database as a data URI so it is permanently preserved
+        across server restarts and page refreshes. Also writes to local disk for fallback."""
+        target_path, tmp_path, ext, file_bytes = await _validate_and_store(AVATAR_DIR, user.id.hex, upload_file)
 
         # Only now that the new file is fully validated do we touch the previous avatar.
         _remove_existing_files(AVATAR_DIR, user.id.hex, keep_ext=ext)
         tmp_path.replace(target_path)
 
-        # A version query param makes each re-upload a distinct URL, so browsers (and any
-        # other participant's client) never serve a stale cached image after a replace.
-        avatar_url = f"/api/v1/users/{user.id}/avatar?v={int(time.time())}"
+        # Store permanently in the database as base64 data URI
+        mime_type = ALLOWED_AVATAR_EXTENSIONS.get(ext, "image/jpeg")
+        b64_str = base64.b64encode(file_bytes).decode("ascii")
+        avatar_url = f"data:{mime_type};base64,{b64_str}"
         user.avatar_url = avatar_url
         await self.session.flush()
         return avatar_url
@@ -127,14 +131,16 @@ class AvatarService:
 
     async def set_group_avatar(self, conversation: Conversation, upload_file: UploadFile) -> str:
         """Validate and store a new display picture for `conversation` (a group), replacing
-        any previous one. Raises BadRequestError on invalid input, leaving the group's
-        existing picture untouched."""
-        target_path, tmp_path, ext = await _validate_and_store(GROUP_AVATAR_DIR, conversation.id.hex, upload_file)
+        any previous one. Stores directly in the database so it is permanently preserved."""
+        target_path, tmp_path, ext, file_bytes = await _validate_and_store(GROUP_AVATAR_DIR, conversation.id.hex, upload_file)
 
         _remove_existing_files(GROUP_AVATAR_DIR, conversation.id.hex, keep_ext=ext)
         tmp_path.replace(target_path)
 
-        avatar_url = f"/api/v1/groups/{conversation.id}/avatar?v={int(time.time())}"
+        # Store permanently in the database as base64 data URI
+        mime_type = ALLOWED_AVATAR_EXTENSIONS.get(ext, "image/jpeg")
+        b64_str = base64.b64encode(file_bytes).decode("ascii")
+        avatar_url = f"data:{mime_type};base64,{b64_str}"
         conversation.avatar_url = avatar_url
         await self.session.flush()
         return avatar_url
