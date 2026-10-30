@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     FRONTEND_ORIGINS: List[str] = [
         "http://localhost:5173",
         "http://127.0.0.1:5173",
+        "https://alingnment-radar.vercel.app",
         "https://alingnment-radar-fdrx.vercel.app",
         "https://www.alingnment-radar.vercel.app",
     ]
@@ -93,7 +94,7 @@ class Settings(BaseSettings):
     # Google OAuth & Identity
     GOOGLE_CLIENT_ID: Optional[str] = None
     GOOGLE_CLIENT_SECRET: Optional[str] = None
-    GOOGLE_REDIRECT_URI: str = "https://alingnment-radar-fdrx.vercel.app/auth/google/callback"
+    GOOGLE_REDIRECT_URI: str = "https://alingnment-radar.vercel.app/auth/google/callback"
     ENCRYPTION_SECRET_KEY: Optional[str] = None
 
     # Redis (Optional)

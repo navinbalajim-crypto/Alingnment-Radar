@@ -19,7 +19,8 @@ export function GoogleButton({
         await onClick(e)
       } else {
         const fetcher = getAuthUrl || authService.getGoogleAuthUrl
-        const res = await fetcher()
+        const redirectUri = `${window.location.origin}/auth/google/callback`
+        const res = await fetcher(redirectUri)
         if (res?.url) {
           window.location.href = res.url
         } else {
